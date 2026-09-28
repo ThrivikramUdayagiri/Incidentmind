@@ -1,0 +1,41 @@
+--- main.py
++++ main.py
+@@ -201,3 +201,38 @@
+     
+     return {"status": "resolved", "memory_retained": success}
+ 
++@app.post("/api/demo/seed")
++async def seed_demo_data():
++    demo_memories = [
++        {
++            "incident_id": "seed-1",
++            "service": "payment-service",
++            "error": "503 Service Unavailable",
++            "actual_root_cause": "Connection pool exhausted due to missing timeout config after deployment v2.4.0",
++            "action_taken": "Restarted service and added connection timeout",
++            "outcome": "Service recovered immediately",
++            "resolution_time": "45m",
++            "lessons_learned": "Always check connection pool config on payment-service deployments."
++        },
++        {
++            "incident_id": "seed-2",
++            "service": "database",
++            "error": "Query timeout",
++            "actual_root_cause": "Missing index on user table",
++            "action_taken": "Added index concurrently",
++            "outcome": "Query times returned to normal",
++            "resolution_time": "1h",
++            "lessons_learned": "Review query plans for large tables."
++        }
++    ]
++    
++    retained_count = 0
++    for mem in demo_memories:
++        try:
++            success = await hindsight_client.retain(mem)
++            if success:
++                retained_count += 1
++        except Exception as e:
++            print(f"Error seeding memory: {e}")
++            
++    return {"status": "seeded", "count": retained_count}

@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #070505; /* near-black charcoal with subtle red undertone */
+  color: #e2e8f0;
+  background-image: 
+    linear-gradient(rgba(244, 63, 94, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 63, 94, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+}
+
+@layer utilities {
+  .animate-signal-flow {
+    animation: signalFlow 1s linear infinite;
+  }
+  .animate-perimeter-scan {
+    animation: perimeterScan 10s linear infinite;
+  }
+}
+
+@keyframes signalFlow {
+  0% { stroke-dashoffset: 16; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes perimeterScan {
+  0% { stroke-dashoffset: var(--start-offset, 0px); }
+  100% { stroke-dashoffset: calc(var(--start-offset, 0px) - 100px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-signal-flow,
+  .animate-perimeter-scan {
+    animation: none !important;
+  }
+}
